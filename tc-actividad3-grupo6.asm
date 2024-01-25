@@ -39,7 +39,7 @@
   # Carga de X en s0:
   lw $s0, X
   
-  # Se repiten los mismos pasos definidos en X
+  # Se repiten los mismos pasos definidos en X para leer X2
   pedir_X1:
     li $v0, 4
     la $a0, valorX1
@@ -55,7 +55,7 @@
   # Comprobar X1 < X
   bge $s1, $s0, error_X1
     
-  # Se repiten los mismos pasos definidos en X
+  # Se repiten los mismos pasos definidos en X para leer Y1
   pedir_Y1:
     li $v0, 4
     la $a0, valorY1
@@ -68,7 +68,7 @@
   # Carga de Y1 en s3:
   lw $s3, Y1
   
-  # Se repiten los mismos pasos definidos en X
+  # Se repiten los mismos pasos definidos en X para leer X2
   pedir_X2:
     li $v0, 4
     la $a0, valorX2
@@ -84,7 +84,7 @@
   # Comprobar X1 < X < X2
   bge $s0, $s2, error_X2
 
-  # Se repiten los mismos pasos definidos en X
+  # Se repiten los mismos pasos definidos en X para leer Y2
   pedir_Y2:
     li $v0, 4
     la $a0, valorY2
