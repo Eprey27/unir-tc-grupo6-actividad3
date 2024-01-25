@@ -132,16 +132,18 @@
   li $v0, 10
   syscall
 
+  # Manejamos los errores para las restricciones de la función X1 < X < X2
   error_X1:
-    # Si la condición no se cumple, imprimir mensaje de error.
+    # Si la condición 'X1 < X' no se cumple, imprimir mensaje de error definido en el valor de la variable 'error_msg_X1'.
     li $v0, 4
     la $a0, error_msg_X1
     syscall
     j pedir_X1
   
   error_X2:
-    # Si la condición no se cumple, imprimir mensaje de error.
+    # Si la condición 'X < X2' no se cumple, imprimir mensaje de error definido en el valor de la variable 'error_msg_X2'.
     li $v0, 4
     la $a0, error_msg_X2
     syscall
     j pedir_X2
+    
