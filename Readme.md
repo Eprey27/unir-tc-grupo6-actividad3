@@ -28,7 +28,7 @@ Nos aseguramos de que las restricciones de la función se cumplan, ya que para e
 
 Si encontramos que la variable X no cumple alguna de las restricciones, entonces presentamos un mensaje de error y volvemos a solicitar el valor correspondiente.
 
-Para realizar las comprobaciones usaremos la instrucción de salto condicional ('bge').
+Para realizar las comprobaciones usaremos comparador la instrucción de salto condicional 'bge' -> 'más grande qué'.
 
 ### Cálculo de la Interpolación
 
