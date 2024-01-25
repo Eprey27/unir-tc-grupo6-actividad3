@@ -1,12 +1,8 @@
 # Actividad 3 - Tecnología de Computadores - Operación de Interpolación Lineal
 
-## Tabla de Contenidos
-
-## Documentación de la Actividad
-
 ## Descripción
 
-Presentación del programa MIPS para la operación de interpolación lineal entre 2 puntos (X1, Y1) y (X2, Y2), calculando el valor correspondiente de Y para un valor de X.
+Programa ensamblador (MIPS) para resolver una operación de interpolación lineal entre 2 puntos (X1, Y1) y (X2, Y2), calculando el valor correspondiente de Y para un valor de X.
 
 ## Declaración de Variables
 
