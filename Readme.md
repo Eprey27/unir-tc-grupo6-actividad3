@@ -12,7 +12,8 @@ En esta sección se definen las variables que se van a utilizar durante el progr
 
 En este programa usaremos 2 tipos de variables:
 
-Cadenas de caracteres
+- Cadenas de caracteres
+- Números enteros
 
 ## Código Ejecutable
 
