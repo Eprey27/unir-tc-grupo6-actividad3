@@ -1,8 +1,8 @@
-#Declaracion de variables y valores:
+#Declaración de variables y valores:
 
-.data	# Bloque de datos dentro del segmento de memoria
+.data	# Sección para la declaración del Bloque de datos dentro del segmento de memoria.
 
-  # Definimos las variables dónde vamos a guardar las coordenadas y les asignamos un valor inicial 0 al utilizar la instrucción word estamos definiendo una palabra de 32.
+  # Definimos las variables dónde vamos a guardar las coordenadas y les asignamos un valor inicial 0 al utilizar la instrucción word estamos definiendo un entero de 32 bits.
 
   X:.word 0
   Y:.word 0
@@ -11,7 +11,7 @@
   Y1:.word 0
   Y2:.word 0
 
-  # Definimos los valores de los mensajes que vamos a presentar en la consola Run I/O. AL utilizar asciiz estamos especificando que la variable es una cadena de texto que termina con un caracter null
+  # Definimos los valores de los mensajes que vamos a presentar en la consola Run I/O. AL utilizar asciiz estamos especificando que la variable es una cadena de texto que termina en null.
 
   valorX1:.asciiz "Por favor, introduce el valor de la coordenada X (X1) del primer punto conocido: "
   valorY1:.asciiz "Por favor, introduce el valor de la coordenada Y (Y1) del primer punto conocido: "
@@ -25,16 +25,18 @@
 
 #Inicio del programa:
 
-.text   # Bloque del "nonton" dentro del segmento de memoria
+.text   # Abrimos sección para el código ejecutable, que ser almacenará dentro del bloque "nonton" en el segmento de memoria.
      
+
+    # Solicitar al usuario que introduzca el valor de X  
   pedir_X:
-    li $v0, 4 # Cargamos la instrucción de imprimir por consola en el registro $v0.
+    li $v0, 4      # Cargamos la instrucción de imprimir por consola en el registro $v0.
     la $a0, valorX # Almacenamos el valor de X1 en el registro $a0 que es el primero disponible del rango $a que va del 0 al 3 (comprobar esta afirmación)
-    syscall # hacemos la llamada al sistema para ejecutar el servicio y el argumento que hemos establecido en las 2 líneas anteriores.
+    syscall        # hacemos la llamada al sistema para ejecutar el servicio y el argumento que hemos establecido en las 2 líneas anteriores.
   leer_X:
-    li $v0, 5 # Cargando en el registro $v0 la instrucción para leer un entero.
-    syscall # llamada al sistema para ejecutar la instrucción anterior.
-    sw $v0, X # Almacena el contenido de $v0 en el segmento de memoria de X
+    li $v0, 5      # Cargando en el registro $v0 la instrucción para leer un entero.
+    syscall        # llamada al sistema para ejecutar la instrucción anterior.
+    sw $v0, X      # Almacena el contenido de $v0 en el segmento de memoria de X
     
   #Carga de X en s0:
   lw $s0,X
