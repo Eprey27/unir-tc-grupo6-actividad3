@@ -77,9 +77,6 @@
     
   # Carga de X2 en s2 para poder utilizarlo en la comprobación de la restricción.
   lw $s2, X2
-
-  # Comprobar la restricción en la que X1 < X2.
-  bge $s1, $s2, error_X1_X2
   
   # Se repiten los mismos pasos definidos y documentados en X1 para leer Y2.
   
@@ -95,8 +92,8 @@
     syscall
     sw $v0, Y2
 
-  # Carga de Y2 en s4 para poder utilizarlo en el cálculo.
-  lw $s4, Y2
+    # Carga de Y2 en s4 para poder utilizarlo en el cálculo.   
+    lw $s4, Y2 
 
   # Se repiten los mismos pasos definidos y documentados en X1 para leer X.
 
@@ -116,13 +113,12 @@
   lw $s0, X
   
   # Comprobación de la restricción en la que X1 < X < X2.
-  validacion_X:
 
   # Si X1 > X, se salta a la etiqueta 'error_X1'.
   bge $s1, $s0, error_X1
-  
+
   # Si X > X2, se salta a la etiqueta 'error_X2'.
-  bge $s0, $s2, error_X2
+  bge $s0, $s2, error_X2 
 
   # Si X1 < X < X2, se continua hacia el calculo.
 
@@ -163,30 +159,23 @@
     lw $a0, Y
     syscall
 
-  Fin_del_programa:
+    # Fin del programa:
+    
     # Terminamos el programa con la instrucción 'exit' y el código 10. 
     li $v0, 10
     syscall
 
   # Gestionamos los errores para las restricciones de la función X1 < X < X2.
-  gestion_errores:
-    error_X1:
-      # Si la condición 'X1 < X' no se cumple, imprimir mensaje de error.
-      li $v0, 4
-      la $a0, error_msg_X1
-      syscall
-      j pedir_X1
+  error_X1:
+    # Si la condición 'X1 < X' no se cumple, imprimir mensaje de error.
+    li $v0, 4
+    la $a0, error_msg_X1
+    syscall
+    j pedir_X1
     
-    error_X2:
-      # Si la condición 'X < X2' no se cumple, imprimir mensaje de error.
-      li $v0, 4
-      la $a0, error_msg_X2
-      syscall
-      j pedir_X2
-
-    error_X1_X2:
-      # Mensaje de error si X1 no es menor que X2.
-      li $v0, 4
-      la $a0, error_msg_X1_X2
-      syscall
-      j pedir_X1
+  error_X2:
+    # Si la condición 'X < X2' no se cumple, imprimir mensaje de error.
+    li $v0, 4
+    la $a0, error_msg_X2
+    syscall
+    j pedir_X2
