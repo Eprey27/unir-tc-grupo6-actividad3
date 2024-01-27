@@ -22,8 +22,7 @@
   valorX: .asciiz "Por favor, introduce el valor de la coordenada X del punto que se quiere interpolar: "
   valorY: .asciiz "El valor estimado de Y en ese punto es: "
   error_msg_X1: .asciiz "Error: El valor de X1 debe ser menor que X.\n"
-  error_msg_X2: .asciiz "Error: El valor de X2 debe ser mayor que X \n"
-  error_msg_X1_X2: .asciiz "Error: El valor de X2 debe ser mayor que el de X1 \n"
+  error_msg_X2: .asciiz "Error: El valor de X2 debe ser mayor que X.\n"
 
 # Inicio del programa:
 
