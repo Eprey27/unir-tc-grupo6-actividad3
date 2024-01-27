@@ -38,10 +38,9 @@
   leer_X1:
     li $v0, 5       # Cargamos en el registro $v0 la instrucción para leer un entero.
     syscall         # Llamada al sistema para ejecutar la instrucción anterior.
-    sw $v0, X1      # Almacena el contenido de $v0 en el segmento de memoria de X1.
-    
-  # Carga de X1 en s1 para poder utilizarlo en la comprobación de la restricción.
-  lw $s1, X1
+    sw $v0, X1      # Almacena el contenido de $v0 en el segmento de memoria de X1.        
+    # Carga de X1 en s1 para poder utilizarlo en la comprobación de la restricción.
+    lw $s1, X1
   
   # Se repiten los mismos pasos definidos y documentados en X1 para leer Y1:
 
@@ -56,9 +55,8 @@
     li $v0, 5
     syscall
     sw $v0, Y1
-    
-  # Carga de Y1 en s3 para poder utilizarlo en la comprobación de la restricción.
-  lw $s3, Y1
+    # Carga de Y1 en s3 para poder utilizarlo en la comprobación de la restricción.        
+    lw $s3, Y1
 
   # Se repiten los mismos pasos definidos y documentados en X1 para leer X2:
 
@@ -73,9 +71,8 @@
     li $v0, 5
     syscall
     sw $v0, X2
-    
-  # Carga de X2 en s2 para poder utilizarlo en la comprobación de la restricción.
-  lw $s2, X2
+    # Carga de X2 en s2 para poder utilizarlo en la comprobación de la restricción.
+    lw $s2, X2
   
   # Se repiten los mismos pasos definidos y documentados en X1 para leer Y2.
   
@@ -90,7 +87,6 @@
     li $v0, 5
     syscall
     sw $v0, Y2
-
     # Carga de Y2 en s4 para poder utilizarlo en el cálculo.   
     lw $s4, Y2 
 
@@ -107,64 +103,29 @@
     li $v0, 5      
     syscall        
     sw $v0, X      
+    # Carga de X en s0 para poder utilizarlo en el cálculo.
+    lw $s0, X
 
-  # Carga de X en s0 para poder utilizarlo en el cálculo.
-  lw $s0, X
+  manejo_errores:
+    # Carga de X1 en s1 para poder utilizarlo en la comprobación de la restricción.
+    lw $s1, X1
+    # Carga de X2 en s2 para poder utilizarlo en la comprobación de la restricción.
+    lw $s2, X2
   
   # Comprobación de la restricción en la que X1 < X < X2.
 
-  # Si X1 > X, se salta a la etiqueta 'error_X1'.
-  bge $s1, $s0, error_X1
+  comprobacion:
+    # Si X1 > X, se salta a la etiqueta 'error_X1 para permitir que el usuario vuelva a introducir un valor dentro del rango'.
+    bge $s1, $s0, error_X1
+    # Si X > X2, se salta a la etiqueta 'error_X2 para permitir que el usuario vuelva a introducir un valor dentro del rango'.
+    bge $s0, $s2, error_X2 
+    # Si X1 < X < X2, se continua hacia el calculo.
+    j calculo
 
-  # Si X > X2, se salta a la etiqueta 'error_X2'.
-  bge $s0, $s2, error_X2 
+  # En esta sección del código definimos las funciones que mostrarán los errores para las restricciones de 
+  # la función X1 < X < X2 y que una vez mostrados enviarán la línea e ejecución de nuevo a los puntos en 
+  # los que el usuario podrá volver a insertar valores dentro del rango permitido.
 
-  # Si X1 < X < X2, se continua hacia el calculo.
-
-  # Cálculo de la interpolación lineal.
-  calculo:
-
-    # Carga de Y2 en s4 para poder utilizarlo en el cálculo.
-    lw $s4, Y2
-        
-    # Cargamos en el registro $t0 el valor de X-X1.
-    sub $t0, $s0, $s1
-
-    # Cargamos en el registro $t1 el valor de Y2-Y1.
-    sub $t1, $s4, $s3
-
-    # t0 = t0*t1 para calcular (X-X1)*(Y2-Y1) y guardarlo en el registro $t0.
-    mul $t0, $t0, $t1
-
-    # t1 = (X2-X1) para calcular el denominador de la fórmula y guardarlo en el registro $t1.
-    sub $t1, $s2, $s1
-
-    # t0 = t0/t1 para calcular ((X-X1)*(Y2-Y1))/(X2-X1) y se guarda en $t0.
-    div $t0, $t0, $t1
-
-    # t0 = t0 + Y1 para calcular ((X-X1)*(Y2-Y1))/(X2-X1) + Y1 que se guarda en el registro $t0.
-    add $t0, $t0, $s3
-
-    # Guardamos el resultado en Y para poder mostrarlo por pantalla.
-    sw $t0, Y
-
-    # Mostramos el texto del valorY por pantalla.
-    li $v0, 4
-    la $a0, valorY
-    syscall
-
-    # Escribimos en la consola el valor de Y, que sería el resultado final del cálculo.
-    li $v0, 1
-    lw $a0, Y
-    syscall
-
-    # Fin del programa:
-    
-    # Terminamos el programa con la instrucción 'exit' y el código 10. 
-    li $v0, 10
-    syscall
-
-  # Gestionamos los errores para las restricciones de la función X1 < X < X2.
   error_X1:
     # Si la condición 'X1 < X' no se cumple, imprimir mensaje de error.
     li $v0, 4
@@ -177,4 +138,38 @@
     li $v0, 4
     la $a0, error_msg_X2
     syscall
-    j pedir_X2
+    j pedir_X2  
+
+  # Cálculo de la interpolación lineal.
+
+  calculo:
+
+    # Carga de Y2 en s4 para poder utilizarlo en el cálculo.
+    lw $s4, Y2        
+    # Cargamos en el registro $t0 el valor de X-X1.
+    sub $t0, $s0, $s1
+    # Cargamos en el registro $t1 el valor de Y2-Y1.
+    sub $t1, $s4, $s3
+    # t0 = t0*t1 para calcular (X-X1)*(Y2-Y1) y guardarlo en el registro $t0.
+    mul $t0, $t0, $t1
+    # t1 = (X2-X1) para calcular el denominador de la fórmula y guardarlo en el registro $t1.
+    sub $t1, $s2, $s1
+    # t0 = t0/t1 para calcular ((X-X1)*(Y2-Y1))/(X2-X1) y se guarda en $t0.
+    div $t0, $t0, $t1
+    # t0 = t0 + Y1 para calcular ((X-X1)*(Y2-Y1))/(X2-X1) + Y1 que se guarda en el registro $t0.
+    add $t0, $t0, $s3
+    # Guardamos el resultado en Y para poder mostrarlo por pantalla.
+    sw $t0, Y
+    # Mostramos el texto del valorY por pantalla.
+    li $v0, 4
+    la $a0, valorY
+    syscall
+    # Escribimos en la consola el valor de Y, que sería el resultado final del cálculo.
+    li $v0, 1
+    lw $a0, Y
+    syscall
+
+  fin_programa:
+    # Terminamos el programa con la instrucción 'exit' y el código 10. 
+    li $v0, 10
+    syscall
