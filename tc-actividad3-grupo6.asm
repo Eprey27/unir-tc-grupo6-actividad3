@@ -39,9 +39,8 @@
   leer_X1:
     li $v0, 5       # Cargamos en el registro $v0 la instrucción para leer un entero.
     syscall         # Llamada al sistema para ejecutar la instrucción anterior.
-    sw $v0, X1      # Almacena el contenido de $v0 en el segmento de memoria de X1.        
-    # Carga de X1 en s1 para poder utilizarlo en la comprobación de la restricción.
-    lw $s1, X1
+    sw $v0, X1      # Almacena el contenido de $v0 en el segmento de memoria de X1 para poder ser posteriormente guardado en un registro.
+    lw $s1, X1      # Carga de X1 en s1 para poder utilizarlo en la comprobación de la restricción y en el cálculo.
   
   # Se repiten los mismos pasos definidos y documentados en X1 para leer Y1:
 
@@ -56,7 +55,7 @@
     li $v0, 5
     syscall
     sw $v0, Y1
-    # Carga de Y1 en s3 para poder utilizarlo en la comprobación de la restricción.        
+    # Carga de Y1 en s3 para poder utilizarlo en la comprobación de la restricción y en el cálculo.
     lw $s3, Y1
 
   # Se repiten los mismos pasos definidos y documentados en X1 para leer X2:
@@ -72,7 +71,7 @@
     li $v0, 5
     syscall
     sw $v0, X2
-    # Carga de X2 en s2 para poder utilizarlo en la comprobación de la restricción.
+    # Carga de X2 en s2 para poder utilizarlo en la comprobación de la restricción y en el cálculo.
     lw $s2, X2
 
   # Comprobar la restricción en la que X1 < X2.
@@ -94,7 +93,7 @@
     # Carga de Y2 en s4 para poder utilizarlo en el cálculo.   
     lw $s4, Y2 
 
-  # Se repiten los mismos pasos definidos y documentados en X1 para leer X.
+  # Se repiten los mismos pasos definidos y documentados en X1 para leer X y en el cálculo.
 
   # Solicitar al usuario que introduzca el valor de X.
   pedir_X:
@@ -109,12 +108,6 @@
     sw $v0, X      
     # Carga de X en s0 para poder utilizarlo en el cálculo.
     lw $s0, X
-
-  manejo_errores:
-    # Carga de X1 en s1 para poder utilizarlo en la comprobación de la restricción.
-    lw $s1, X1
-    # Carga de X2 en s2 para poder utilizarlo en la comprobación de la restricción.
-    lw $s2, X2
   
   # Comprobación de la restricción en la que X1 < X < X2.
 
@@ -130,26 +123,27 @@
   # la función X1 < X < X2 y que una vez mostrados enviarán la línea e ejecución de nuevo a los puntos en 
   # los que el usuario podrá volver a insertar valores dentro del rango permitido.
 
-  error_X1:
-    # Si la condición 'X1 < X' no se cumple, imprimir mensaje de error.
-    li $v0, 4
-    la $a0, error_msg_X1
-    syscall
-    j pedir_X1
-    
-  error_X2:
-    # Si la condición 'X < X2' no se cumple, imprimir mensaje de error.
-    li $v0, 4
-    la $a0, error_msg_X2
-    syscall
-    j pedir_X2
+  manejo_errores:
+    error_X1:
+      # Si la condición 'X1 < X' no se cumple, imprimir mensaje de error.
+      li $v0, 4
+      la $a0, error_msg_X1
+      syscall
+      j pedir_X1
+      
+    error_X2:
+      # Si la condición 'X < X2' no se cumple, imprimir mensaje de error.
+      li $v0, 4
+      la $a0, error_msg_X2
+      syscall
+      j pedir_X2
 
-  error_X1_X2:
-    # Mensaje de error si X1 no es menor que X2.
-    li $v0, 4
-    la $a0, error_msg_X1_X2
-    syscall
-    j pedir_X1
+    error_X1_X2:
+      # Mensaje de error si X1 no es menor que X2.
+      li $v0, 4
+      la $a0, error_msg_X1_X2
+      syscall
+      j pedir_X1
 
   # Cálculo de la interpolación lineal.
 
