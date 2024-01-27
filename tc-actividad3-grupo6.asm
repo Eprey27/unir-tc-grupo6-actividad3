@@ -23,6 +23,7 @@
   valorY: .asciiz "El valor estimado de Y en ese punto es: "
   error_msg_X1: .asciiz "Error: El valor de X1 debe ser menor que X.\n"
   error_msg_X2: .asciiz "Error: El valor de X2 debe ser mayor que X.\n"
+  error_msg_X1_X2: .asciiz "Error: El valor de X2 debe ser mayor que el de X1.\n"
 
 # Inicio del programa:
 
@@ -73,6 +74,9 @@
     sw $v0, X2
     # Carga de X2 en s2 para poder utilizarlo en la comprobación de la restricción.
     lw $s2, X2
+
+  # Comprobar la restricción en la que X1 < X2.
+  bge $s1, $s2, error_X1_X2
   
   # Se repiten los mismos pasos definidos y documentados en X1 para leer Y2.
   
@@ -138,12 +142,18 @@
     li $v0, 4
     la $a0, error_msg_X2
     syscall
-    j pedir_X2  
+    j pedir_X2
+
+  error_X1_X2:
+    # Mensaje de error si X1 no es menor que X2.
+    li $v0, 4
+    la $a0, error_msg_X1_X2
+    syscall
+    j pedir_X1
 
   # Cálculo de la interpolación lineal.
 
   calculo:
-
     # Carga de Y2 en s4 para poder utilizarlo en el cálculo.
     lw $s4, Y2        
     # Cargamos en el registro $t0 el valor de X-X1.
